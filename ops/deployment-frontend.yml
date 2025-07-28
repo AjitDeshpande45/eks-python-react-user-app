@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-frontend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-frontend-label
+  template:
+    metadata:
+      labels:
+        app: react-frontend-label
+    spec:
+      containers:
+      - name: react-frontend-app
+        image: ajit45/simple-react-frontend:latest
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: dockerhub-secret
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  react-frontend-service
+spec:
+  selector:
+    app: react-frontend-label
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+      nodePort: 30009

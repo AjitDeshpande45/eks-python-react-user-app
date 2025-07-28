@@ -1,0 +1,21 @@
+eksctl create cluster \
+  --name first-eks-cluster  \
+  --region ap-south-1 \
+  --nodegroup-name ng-1 \
+  --node-type t2.medium \
+  --nodes 1 \
+  --nodes-min 1 \
+  --nodes-max 1 \
+  --node-security-groups sg-084d8e280d2518cd3 \
+  --ssh-access \
+  --ssh-public-key new-ap-south-key \
+  --vpc-public-subnets subnet-018a405c4b6e5683f subnet-029e6efd04c7627f8 \
+  --cluster-iam-role-arn arn:aws:iam::869935068740:role/AmazonEKSAutoClusterRole \
+  --node-iam-role arn:aws:iam::869935068740:role/AmazonEKSAutoNodeRole
+
+
+
+  kubectl create secret docker-registry dockerhub-secret \
+  --docker-username=ajit45 \
+  --docker-password=Ajit@2606018 \
+  --docker-email=ajitdeshpande00.ad@gmail.com

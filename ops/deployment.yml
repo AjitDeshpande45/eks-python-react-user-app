@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:15.13
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: myuser
+        - name: POSTGRES_PASSWORD
+          value: admin
+        - name: POSTGRES_DB
+          value: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-container
+spec:
+  selector:
+    app: postgres
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-app-label
+  template:
+    metadata:
+      labels:
+        app: python-app-label
+    spec:
+      containers:
+      - name: python-app
+        image: ajit45/simple-python-postgres:latest
+        ports:
+        - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  python-app-service
+spec:
+  selector:
+    app: python-app-label
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30008
+---

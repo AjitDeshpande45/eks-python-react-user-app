@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-backend-label
+  template:
+    metadata:
+      labels:
+        app: python-backend-label
+    spec:
+      containers:
+      - name: python-backend-app
+        image: ajit45/simple-python-backend:latest 
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: dockerhub-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name:  python-backend-service
+spec:
+  selector:
+    app: python-backend-label
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30010

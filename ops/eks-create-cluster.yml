@@ -1,0 +1,31 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: first-eks-cluster
+  region: ap-south-1
+  version: "1.32"
+
+vpc:
+  subnets:
+    public:
+      ap-south-1a: { id: subnet-018a405c4b6e5683f }
+      ap-south-1b: { id: subnet-029e6efd04c7627f8 }
+
+iam:
+  serviceRoleARN: arn:aws:iam::869935068740:role/AmazonEKSAutoClusterRole
+
+managedNodeGroups:
+  - name: ng-1
+    instanceType: t2.medium
+    desiredCapacity: 1
+    minSize: 1
+    maxSize: 1
+    ssh:
+      allow: true
+      publicKeyName: new-ap-south-key
+    iam:
+      instanceRoleARN: arn:aws:iam::869935068740:role/AmazonEKSAutoNodeRole
+    securityGroups:
+      attachIDs:
+        - sg-084d8e280d2518cd3
